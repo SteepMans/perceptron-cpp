@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>D:\work\perception-cpp\perception-cpp\x64\Debug\perception-cpp.exe</FullPath>
+      <FullPath>D:\work\perception-cpp\src\x64\Debug\perception-cpp.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

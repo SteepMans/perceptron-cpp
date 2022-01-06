@@ -1,1 +1,2 @@
 D:\work\perception-cpp\perception-cpp\x64\Debug\perception-cpp.exe
+D:\work\perception-cpp\src\x64\Debug\perceptron-cpp.exe
