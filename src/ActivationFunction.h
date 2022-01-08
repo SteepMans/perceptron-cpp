@@ -15,6 +15,7 @@ private:
 	FUNCTION_ACTIVATE activate = FUNCTION_ACTIVATE::SIGMOID;
 
 public:
+	ActivationFunction();
 	ActivationFunction(FUNCTION_ACTIVATE activate);
 	void getName();
 	double use(double value);

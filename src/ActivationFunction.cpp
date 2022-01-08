@@ -31,6 +31,11 @@ ActivationFunction::ActivationFunction(FUNCTION_ACTIVATE activate)
 	this->activate = activate;
 }
 
+ActivationFunction::ActivationFunction()
+{
+	this->activate = SIGMOID;
+}
+
 double ActivationFunction::use(double value)
 {
 	double finish_value = 0.0;

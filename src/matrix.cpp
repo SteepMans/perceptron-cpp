@@ -3,12 +3,7 @@ using namespace std;
 
 Matrix::Matrix(unsigned rowSize, unsigned colSize, double initial) 
 {
-    m_rowSize = rowSize;
-    m_colSize = colSize;
-    m_matrix.resize(rowSize);
-
-    for (unsigned i = 0; i < m_matrix.size(); i++)
-        m_matrix[i].resize(colSize, initial);
+    this->init(rowSize, colSize, initial);
 }
 
 Matrix::Matrix(const Matrix& B)
@@ -17,6 +12,22 @@ Matrix::Matrix(const Matrix& B)
     this->m_rowSize = B.getRows();
     this->m_matrix = B.m_matrix;
 
+}
+
+Matrix::Matrix()
+{
+    this->m_colSize = 0;
+    this->m_rowSize = 0;
+}
+
+void Matrix::init(unsigned rowSize, unsigned colSize, double initial)
+{
+    m_rowSize = rowSize;
+    m_colSize = colSize;
+    m_matrix.resize(rowSize);
+
+    for (unsigned i = 0; i < m_matrix.size(); i++)
+        m_matrix[i].resize(colSize, initial);
 }
 
 Matrix::~Matrix() 

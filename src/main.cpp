@@ -1,11 +1,12 @@
 ﻿#include <iostream>
 #include "matrix.h"
 #include "ActivationFunction.h"
+#include "Network.h"
 
 int main()
 {
-    auto funx_activated = ActivationFunction(LUCKY_RELU);
-    funx_activated.getName();
+    size_t size_layer = 2;
+    int* layer = new int[size_layer] {736, 12, 9};
 
-    std::cout << funx_activated.use(-2.0) << std::endl;
+    Network net = Network(layer, size_layer, SIGMOID);
 }

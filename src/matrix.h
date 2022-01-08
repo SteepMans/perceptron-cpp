@@ -23,8 +23,10 @@ private:
 public:
     Matrix(unsigned, unsigned, double);
     Matrix(const Matrix&);
+    Matrix();
     ~Matrix();
 
+    void init(unsigned, unsigned, double);
     Matrix operator+(Matrix&);
     Matrix operator-(Matrix&);
     Matrix operator*(Matrix&);
