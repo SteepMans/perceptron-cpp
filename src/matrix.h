@@ -29,8 +29,8 @@ public:
 
     void init(unsigned, unsigned, double);
     Matrix operator+(Matrix&);
-    Matrix operator-(Matrix&);
-    Matrix operator*(Matrix&);
+    Matrix operator-(Matrix);
+    Matrix operator*(Matrix);
     Matrix transpose();
 
     Matrix operator+(double);
@@ -42,6 +42,8 @@ public:
     void print() const;
     unsigned getRows() const;
     unsigned getCols() const;
+    void changeSign();
     void sumVector(double* vector);
     void randomValue(const unsigned multipiler = 1.0);
+    Matrix dot(Matrix matrix);
 };

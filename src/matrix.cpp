@@ -30,6 +30,15 @@ void Matrix::init(unsigned rowSize, unsigned colSize, double initial)
         m_matrix[i].resize(colSize, initial);
 }
 
+void Matrix::changeSign()
+{
+    for (unsigned i = 0; i < m_rowSize; i++)
+    {
+        for (unsigned j = 0; j < m_colSize; j++)
+            this->m_matrix[i][j] = 1 - this->m_matrix[i][j];
+    }
+}
+
 Matrix::~Matrix() 
 {
 }
@@ -47,7 +56,7 @@ Matrix Matrix::operator + (Matrix& B)
     return sum;
 }
 
-Matrix Matrix::operator - (Matrix& B) 
+Matrix Matrix::operator-(Matrix B) 
 {
     Matrix diff(m_colSize, m_rowSize, 0.0);
 
@@ -60,19 +69,40 @@ Matrix Matrix::operator - (Matrix& B)
     return diff;
 }
 
-Matrix Matrix::operator * (Matrix& B) 
+Matrix Matrix::operator * (Matrix B) 
 {
-    Matrix multip(m_rowSize, B.getCols(), 0.0);
+    Matrix multip = Matrix(m_rowSize, m_colSize, 0.0);
 
-    if (m_colSize == B.getRows())
+    if (m_colSize == B.getCols() && m_rowSize == B.getRows())
     {
         for (unsigned i = 0; i < m_rowSize; i++)
+        {
+            for (unsigned j = 0; j < m_colSize; j++)
+            {
+                multip(i, j) = m_matrix[i][j] * B(i, j);
+            }
+        }
+        return multip;
+    }
+    else
+    {
+        throw std::runtime_error("Error size matrix");
+    }
+}
+
+Matrix Matrix::dot(Matrix B)
+{
+    Matrix multip(this->m_rowSize, B.getCols(), 0.0);
+
+    if (this->m_colSize == B.getRows())
+    {
+        for (unsigned i = 0; i < this->m_rowSize; i++)
         {
             for (unsigned j = 0; j < B.getCols(); j++)
             {
                 double temp = 0.0;
 
-                for (unsigned k = 0; k < m_colSize; k++)
+                for (unsigned k = 0; k < this->m_colSize; k++)
                     temp += m_matrix[i][k] * B(k, j);
 
                 multip(i, j) = temp;

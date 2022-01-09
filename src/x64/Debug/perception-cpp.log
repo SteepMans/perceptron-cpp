@@ -1,5 +1,8 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(510,5): warning MSB8028: промежуточный каталог (x64\Debug\) содержит файлы, которые используются совместно с другим проектом (perception-cpp.vcxproj).  Это может привести к ошибкам очистки и перестроения.
-  main.cpp
+  Network.cpp
 D:\work\perception-cpp\src\Network.h(3,10): warning C4067: непредвиденные лексемы за директивой препроцессора, требуется newline
 D:\work\perception-cpp\src\Network.h(4,10): warning C4067: непредвиденные лексемы за директивой препроцессора, требуется newline
+D:\work\perception-cpp\src\Network.cpp(44,20): warning C4018: <: несоответствие типов со знаком и без знака
+D:\work\perception-cpp\src\Network.cpp(58,2): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+D:\work\perception-cpp\src\Network.cpp(121,24): warning C4018: <: несоответствие типов со знаком и без знака
   perception-cpp.vcxproj -> D:\work\perception-cpp\src\x64\Debug\perceptron-cpp.exe

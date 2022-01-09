@@ -19,6 +19,7 @@ public:
 	ActivationFunction();
 	ActivationFunction(FUNCTION_ACTIVATE activate);
 	void getName();
+	Matrix derivative(Matrix value);
 	double use(double value);
 	Matrix use(Matrix matrix);
 	FUNCTION_ACTIVATE getType();

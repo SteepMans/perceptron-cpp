@@ -37,6 +37,39 @@ ActivationFunction::ActivationFunction()
 	this->activate = SIGMOID;
 }
 
+Matrix ActivationFunction::derivative(Matrix matrix)
+{
+	if (matrix.getCols() == 1)
+	{
+		Matrix finish = Matrix(matrix);
+
+		for (int idx = 0; idx < finish.getRows(); idx++)
+		{
+			switch (ActivationFunction::getType())
+			{
+			case SIGMOID:
+				finish(idx, 0) = matrix(idx, 0) * (1 - matrix(idx, 0));
+				break;
+
+			case LUCKY_RELU:
+				if (matrix(idx, 0) < 0 || matrix(idx, 0) > 1) finish(idx, 0) = 0.01;
+				else finish(idx, 0) = 1;
+				break;
+
+			default:
+				throw std::runtime_error("Error type activationFunction");
+				break;
+			}
+		}
+
+		return finish;
+	}
+	else
+	{
+		throw std::runtime_error("not vector");
+	}
+}
+
 Matrix ActivationFunction::use(Matrix matrix)
 {
 	if (matrix.getCols() == 1)

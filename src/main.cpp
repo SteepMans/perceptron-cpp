@@ -12,12 +12,24 @@ int main()
     size_t size_layer = 4;
     int* layer = new int[size_layer] {784, 20, 15, 10};
 
-    Network net = Network(layer, size_layer, SIGMOID, mnist.getData());
+    Network net = Network(layer, size_layer, 0.1, SIGMOID, mnist.getData());
     net.printConfig();
 
-    Matrix value = net.feedForward(5);
-    int max_index = net.getMaxIndexValue(value);
+    int epoch = 5;
 
-    std::cout << "answer " << max_index << " digit " << mnist.getData()[5].digit << std::endl;
-    value.print();
+    for (int idx = 0; idx < epoch; idx++)
+    {
+        int correct_answer = 0;
+        for (int i = 0; i < mnist.getExamples(); i++)
+        {
+            net.backPropogation(i);
+            
+            Matrix prediction = net.feedForward(i);
+            //std::cout << net.getMaxIndexValue(prediction) << " " << mnist.getData()[i].digit << std::endl;
+            if (mnist.getData()[i].digit == net.getMaxIndexValue(prediction))
+                correct_answer++;
+        }
+
+        std::cout << "epoch " << idx << " acu: " << correct_answer << std::endl;
+    }
 }
