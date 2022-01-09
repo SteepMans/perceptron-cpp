@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include "matrix.h"
 
 enum FUNCTION_ACTIVATE
 {
@@ -19,6 +20,7 @@ public:
 	ActivationFunction(FUNCTION_ACTIVATE activate);
 	void getName();
 	double use(double value);
+	Matrix use(Matrix matrix);
 	FUNCTION_ACTIVATE getType();
 };
 

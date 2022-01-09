@@ -23,6 +23,7 @@ private:
 public:
     Matrix(unsigned, unsigned, double);
     Matrix(const Matrix&);
+    Matrix(double* vector, int size);
     Matrix();
     ~Matrix();
 
@@ -41,5 +42,6 @@ public:
     void print() const;
     unsigned getRows() const;
     unsigned getCols() const;
+    void sumVector(double* vector);
     void randomValue(const unsigned multipiler = 1.0);
 };

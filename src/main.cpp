@@ -2,11 +2,22 @@
 #include "matrix.h"
 #include "ActivationFunction.h"
 #include "Network.h"
+#include "Dataset.h"
 
 int main()
 {
-    size_t size_layer = 2;
-    int* layer = new int[size_layer] {736, 12, 9};
+    Dataset mnist = Dataset();
+    mnist.load(std::string("dataset/mnist_10k.txt"));
 
-    Network net = Network(layer, size_layer, SIGMOID);
+    size_t size_layer = 4;
+    int* layer = new int[size_layer] {784, 20, 15, 10};
+
+    Network net = Network(layer, size_layer, SIGMOID, mnist.getData());
+    net.printConfig();
+
+    Matrix value = net.feedForward(5);
+    int max_index = net.getMaxIndexValue(value);
+
+    std::cout << "answer " << max_index << " digit " << mnist.getData()[5].digit << std::endl;
+    value.print();
 }

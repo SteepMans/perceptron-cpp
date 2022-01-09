@@ -27,6 +27,9 @@
     <ClCompile Include="Network.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Dataset.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="matrix.h">
@@ -38,5 +41,12 @@
     <ClInclude Include="Network.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="Dataset.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="dataset\mnist.txt" />
+    <Text Include="dataset\mnist_10k.txt" />
   </ItemGroup>
 </Project>

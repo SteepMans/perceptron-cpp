@@ -86,6 +86,19 @@ Matrix Matrix::operator * (Matrix& B)
     }
 }
 
+Matrix::Matrix(double* vector, int size)
+{
+    this->m_rowSize = size;
+    this->m_colSize = 1;
+    this->init(this->m_rowSize, this->m_colSize, 0.0);
+
+    for (unsigned i = 0; i < m_rowSize; i++)
+    {
+        for (unsigned j = 0; j < m_colSize; j++)
+            this->m_matrix[i][j] = vector[i];
+    }
+}
+
 Matrix Matrix::operator + (double scalar) 
 {
     Matrix result(m_rowSize, m_colSize, 0.0);
@@ -99,6 +112,14 @@ Matrix Matrix::operator + (double scalar)
     }
 
     return result;
+}
+
+void Matrix::sumVector(double* vector)
+{
+    for (int idx = 0; idx < this->getRows(); idx++)
+    {
+        this->m_matrix[idx][0] += vector[idx];
+    }
 }
 
 Matrix Matrix::operator - (double scalar) 
@@ -187,6 +208,6 @@ void Matrix::randomValue(const unsigned multipiler)
     for (unsigned i = 0; i < m_rowSize; i++)
     {
         for (unsigned j = 0; j < m_colSize; j++)
-            m_matrix[i][j] = rand() / (RAND_MAX + 1.) * multipiler;
+            m_matrix[i][j] = -3 + (double)rand() / RAND_MAX * 6;
     }
 }

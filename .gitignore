@@ -1,3 +1,5 @@
+src/dataset/mnist.txt
+
 # Prerequisites
 .vs
 *.d

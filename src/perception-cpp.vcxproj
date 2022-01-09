@@ -141,14 +141,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ActivationFunction.cpp" />
+    <ClCompile Include="Dataset.cpp" />
     <ClCompile Include="matrix.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Network.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActivationFunction.h" />
+    <ClInclude Include="Dataset.h" />
     <ClInclude Include="matrix.h" />
     <ClInclude Include="Network.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="dataset\mnist.txt" />
+    <Text Include="dataset\mnist_10k.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
