@@ -18,9 +18,9 @@ class Matrix
 private:
     unsigned m_rowSize;
     unsigned m_colSize;
-    vector<vector<double> > m_matrix;
 
 public:
+    double** m_matrix;
     Matrix(unsigned, unsigned, double);
     Matrix(const Matrix&);
     Matrix(double* vector, int size);
@@ -46,4 +46,9 @@ public:
     void sumVector(double* vector);
     void randomValue(const unsigned multipiler = 1.0);
     Matrix dot(Matrix matrix);
+    double* dot(double* matrix, int vector_size);
+    void dotTranspose(double* matrix, int vector_size, double* finish);
+
+    friend std::ostream& operator << (std::ostream& os, const Matrix& m);
+    friend std::istream& operator >> (std::istream& is, Matrix& m);
 };

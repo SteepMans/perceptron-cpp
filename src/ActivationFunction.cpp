@@ -70,37 +70,75 @@ Matrix ActivationFunction::derivative(Matrix matrix)
 	}
 }
 
-Matrix ActivationFunction::use(Matrix matrix)
+double ActivationFunction::derivative(double value)
 {
-	if (matrix.getCols() == 1)
-	{
-		Matrix finish = Matrix(matrix);
+	double finish = 0.0;
 
-		for (int idx = 0; idx < finish.getRows(); idx++)
+	switch (ActivationFunction::getType())
+	{
+	case SIGMOID:
+		finish = value * (1 - value);
+		break;
+
+	case LUCKY_RELU:
+		if (value < 0 || value > 1) finish = 0.01;
+		else finish = 1;
+		break;
+
+	default:
+		throw std::runtime_error("Error type activationFunction");
+		break;
+	}
+
+	return finish;
+}
+
+void ActivationFunction::derivative(double* vector, int vector_size)
+{
+	double* finish = new double[vector_size];
+
+	for (int idx = 0; idx < vector_size; idx++)
+	{
+		switch (ActivationFunction::getType())
 		{
-			switch (ActivationFunction::getType())
-			{
-			case SIGMOID:
-				finish(idx, 0) = 1. / (1. + exp(-matrix(idx, 0)));
-				break;
+		case SIGMOID:
+			finish[idx] = vector[idx] * (1 - vector[idx]);
+			break;
 
-			case LUCKY_RELU:
-				if (matrix(idx, 0) < 0) finish(idx, 0) = matrix(idx, 0) * 0.01;
-				else if (matrix(idx, 0) > 1) finish(idx, 0) = 1. + 0.01 * (matrix(idx, 0) - 1.);
-				break;
+		case LUCKY_RELU:
+			if (vector[idx] < 0 || vector[idx] > 1) finish[idx] = 0.01;
+			else finish[idx] = 1;
+			break;
 
-			default:
-				throw std::runtime_error("Error type activationFunction");
-				break;
-			}
-		}
-
-		return finish;
+		default:
+			throw std::runtime_error("Error type activationFunction");
+			break;
+		}	
 	}
-	else
+}
+
+double* ActivationFunction::use(double* vector, int vector_size)
+{
+	for (int idx = 0; idx < vector_size; idx++)
 	{
-		throw std::runtime_error("not vector");
+		switch (ActivationFunction::getType())
+		{
+		case SIGMOID:
+			vector[idx] = 1. / (1. + exp(-vector[idx]));
+			break;
+
+		case LUCKY_RELU:
+			if (vector[idx] < 0) vector[idx] = vector[idx] * 0.01;
+			else if (vector[idx] > 1) vector[idx] = 1. + 0.01 * (vector[idx] - 1.);
+			break;
+
+		default:
+			throw std::runtime_error("Error type activationFunction");
+			break;
+		}
 	}
+
+	return vector;
 }
 
 double ActivationFunction::use(double value)

@@ -48,5 +48,7 @@
   <ItemGroup>
     <Text Include="dataset\mnist.txt" />
     <Text Include="dataset\mnist_10k.txt" />
+    <Text Include="weights\Weights.txt" />
+    <Text Include="test.txt" />
   </ItemGroup>
 </Project>

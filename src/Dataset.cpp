@@ -1,5 +1,7 @@
 #include "Dataset.h"
 #include <iostream>
+#include <uchar.h>
+using namespace std;
 
 void Dataset::load(std::string path, int input_layer_count_neyron)
 {

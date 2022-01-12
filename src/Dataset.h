@@ -12,10 +12,10 @@ struct DatasetData
 class Dataset
 {
 private:
-	DatasetData* data;
 	int examples;
 
 public:
+	DatasetData* data;
 	void load(std::string path, int input_layer_count_neyron = 784);
 	DatasetData* getData();
 	int getExamples();

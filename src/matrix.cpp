@@ -22,12 +22,18 @@ Matrix::Matrix()
 
 void Matrix::init(unsigned rowSize, unsigned colSize, double initial)
 {
-    m_rowSize = rowSize;
-    m_colSize = colSize;
-    m_matrix.resize(rowSize);
+    this->m_rowSize = rowSize;
+    this->m_colSize = colSize;
+    
+    this->m_matrix = new double* [m_rowSize];
+    for (int i = 0; i < m_rowSize; i++)
+        this->m_matrix[i] = new double[colSize];
 
-    for (unsigned i = 0; i < m_matrix.size(); i++)
-        m_matrix[i].resize(colSize, initial);
+    for (int i = 0; i < m_rowSize; i++) {
+        for (int j = 0; j < colSize; j++) {
+            this->m_matrix[i][j] = 0;
+        }
+    }
 }
 
 void Matrix::changeSign()
@@ -109,6 +115,49 @@ Matrix Matrix::dot(Matrix B)
             }
         }
         return multip;
+    }
+    else
+    {
+        throw std::runtime_error("Error size matrix");
+    }
+}
+
+double* Matrix::dot(double* vector, int vector_size)
+{
+    double* multip = new double[vector_size];
+
+    if (this->m_colSize == vector_size)
+    {
+        for (unsigned i = 0; i < this->m_rowSize; i++)
+        {
+            double temp = 0.0;
+
+            for (unsigned k = 0; k < this->m_colSize; k++)
+                temp += m_matrix[i][k] * vector[k];
+
+            multip[i] = temp;
+        }
+        return multip;
+    }
+    else
+    {
+        throw std::runtime_error("Error size matrix");
+    }
+}
+
+void Matrix::dotTranspose(double* vector, int vector_size, double* finish)
+{
+    if (this->m_rowSize == vector_size)
+    {
+        for (unsigned i = 0; i < this->m_colSize; i++)
+        {
+            double temp = 0.0;
+
+            for (unsigned k = 0; k < this->m_rowSize; k++)
+                temp += m_matrix[k][i] * vector[k];
+
+            finish[i] = temp;
+        }
     }
     else
     {
@@ -219,6 +268,7 @@ Matrix Matrix::transpose()
             Transpose(i, j) = this->m_matrix[j][i];
         }
     }
+
     return Transpose;
 }
 
@@ -240,4 +290,22 @@ void Matrix::randomValue(const unsigned multipiler)
         for (unsigned j = 0; j < m_colSize; j++)
             m_matrix[i][j] = -3 + (double)rand() / RAND_MAX * 6;
     }
+}
+
+std::ostream& operator << (std::ostream& os, const Matrix& m) {
+    for (int i = 0; i < m.getRows(); ++i) {
+        for (int j = 0; j < m.getCols(); j++) {
+            os << m.m_matrix[i][j] << " ";
+        }
+    }
+    return os;
+}
+
+std::istream& operator >> (std::istream& is, Matrix& m) {
+    for (int i = 0; i < m.getRows(); ++i) {
+        for (int j = 0; j < m.getCols(); j++) {
+            is >> m.m_matrix[i][j];
+        }
+    }
+    return is;
 }

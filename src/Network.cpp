@@ -19,59 +19,60 @@ Network::Network(int* layer, size_t size, int learning_rate, FUNCTION_ACTIVATE a
 
 		for (int j = 0; j < layer[idx + 1]; j++) 
 			this->bios[idx][j] = ((rand() % 50)) * 0.06 / (layer[idx] + 15);
+		
+		neurons_value = new double* [this->size]; 
+		neurons_error = new double* [this->size];
+		
+		for (int i = 0; i < this->size; i++) 
+		{
+			neurons_value[i] = new double[this->layer[i]]; 
+			neurons_error[i] = new double[this->layer[i]];
+		}
 	}
 }
 
-Matrix Network::feedForward(int dataset_index)
+double* Network::feedForward(int dataset_index)
 {
-	Matrix neurons_value = Matrix(this->dataset[dataset_index].pixels, this->layer[0]);
+	for (int idx = 0; idx < this->layer[0]; idx++)
+		this->neurons_value[0][idx] = this->dataset[dataset_index].pixels[idx];
 
 	for (int idx = 1; idx < this->size; idx++)
 	{
-		neurons_value = this->weights[idx - 1].dot(neurons_value);
-		neurons_value.sumVector(this->bios[idx - 1]);
-		neurons_value = this->active_function.use(neurons_value);
+		this->neurons_value[idx] = this->weights[idx - 1].dot(this->neurons_value[idx - 1], this->layer[idx - 1]);
+		
+		for(int i = 0; i < this->layer[idx]; i++)
+			this->neurons_value[idx][i] += this->bios[idx - 1][i];
+		
+		this->neurons_value[idx] = this->active_function.use(this->neurons_value[idx], this->layer[idx]);
 	}
 
-	return neurons_value;
+	return this->neurons_value[this->size -1];
 }
 
-void Network::backPropogation(int dataset_index)
+void Network::backPropogation(int dataset_index, int epoch)
 {
-	Matrix* neurons_err = new Matrix[this->size];
-	neurons_err[this->size - 1] = this->feedForward(dataset_index);
+	neurons_error[this->size - 1] = this->neurons_value[this->size - 1];
 
-	for (int i = 0; i < neurons_err[this->size - 1].getRows(); i++)
+	for (int i = 0; i < this->layer[this->size - 1]; i++)
 	{
 		if (i == this->dataset[dataset_index].digit)
 		{
-			neurons_err[this->size - 1](i, 0) = 1 - neurons_err[this->size - 1](i, 0);
+			neurons_error[this->size - 1][i] = 1 - neurons_error[this->size - 1][i] *
+				this->active_function.derivative(neurons_error[this->size - 1][i]);
 		}
 		else
 		{
-			neurons_err[this->size - 1](i, 0) = -neurons_err[this->size - 1](i, 0);
+			neurons_error[this->size - 1][i] = -neurons_error[this->size - 1][i] *
+				this->active_function.derivative(neurons_error[this->size - 1][i]);
 		}
 	}
 
-	Matrix error_end_layer = neurons_err[this->size - 1] * this->active_function.use(neurons_err[this->size - 1]);
+	// neurons_error[this->size - 1] = neurons_error[this->size - 1] * this->active_function.derivative(neurons_err[this->size - 1]);
 
 	for (int i = this->size - 2; i > 0; i--)
 	{
-		neurons_err[i] = this->weights[i].transpose().dot(neurons_err[i + 1]);
-		neurons_err[i] = neurons_err[i] * this->active_function.use(neurons_err[i]);
-	}
-
-	Matrix* neurons_value_list = new Matrix[this->size];
-	Matrix neurons_value = Matrix(this->dataset[dataset_index].pixels, this->layer[0]);
-	neurons_value_list[0] = neurons_value;
-
-	for (int idx = 1; idx < this->size; idx++)
-	{
-		neurons_value = this->weights[idx - 1].dot(neurons_value);
-		neurons_value.sumVector(this->bios[idx - 1]);
-		neurons_value = this->active_function.use(neurons_value);
-
-		neurons_value_list[idx] = neurons_value;
+		this->weights[i].dotTranspose(neurons_error[i + 1], this->layer[i + 1], neurons_error[i]);
+		this->active_function.derivative(neurons_error[i], this->layer[i]);
 	}
 
 	for (int i = 0; i < this->size - 1; i++)
@@ -79,20 +80,15 @@ void Network::backPropogation(int dataset_index)
 		for (int j = 0; j < this->layer[i + 1]; j++)
 		{
 			for (int k = 0; k < this->layer[i]; k++)
-				this->weights[i](j, k) += neurons_value_list[i](k, 0) * neurons_err[i + 1](j, 0) * this->learning_rate;
+				this->weights[i](j, k) += neurons_value[i][k] * neurons_error[i + 1][j]
+						* 0.15 * exp(-epoch / 20.);
 		}	
-
-		if (i == 0)
-		{
-			this->weights[i].print();
-			std::cout << i << std::endl;
-		}
 	}
 
 	for (int i = 0; i < this->size - 1; i++)
 	{
 		for (int j = 0; j < this->layer[i + 1]; j++)
-			this->bios[i][j] = neurons_err[i + 1](j, 0) * this->learning_rate;
+			this->bios[i][j] += neurons_error[i + 1][j] * 0.15 * exp(-epoch / 20.);
 	}
 }
 
@@ -114,6 +110,34 @@ Network::~Network()
 	//delete this->weights;
 }
 
+void Network::readWeights(std::string path)
+{
+	std::ifstream file_w;
+	file_w.open(path);
+	
+	if (!file_w.is_open()) 
+	{
+		std::cout << "Error reading the file";
+		system("pause");
+	}
+	
+	for (int i = 0; i < this->size - 1; ++i) 
+	{
+		file_w >> weights[i];
+	}
+
+	for (int i = 0; i < this->size - 1; ++i)
+	{
+		for (int j = 0; j < this->layer[i + 1]; ++j) 
+		{
+			file_w >> bios[i][j];
+		}
+	}
+
+	std::cout << "Weights readed \n";
+	file_w.close();
+}
+
 int Network::getMaxIndexValue(Matrix vector)
 {
 	int max_index = 0;
@@ -125,4 +149,40 @@ int Network::getMaxIndexValue(Matrix vector)
 	}
 
 	return max_index;
+}
+
+int Network::getMaxIndexValue(double* vector, int vector_size)
+{
+	int max_index = 0;
+
+	for (int idx = 0; idx < vector_size; idx++)
+	{
+		if (vector[idx] > vector[max_index])
+			max_index = idx;
+	}
+
+	return max_index;
+}
+
+void Network::saveWeights(std::string path)
+{
+	std::ofstream file_weight;
+	file_weight.open(path);
+
+	if (!file_weight.is_open())
+	{
+		std::cout << "[net] Error reading the file";
+		system("pause");
+	}
+	for (int i = 0; i < this->size - 1; ++i)
+		file_weight << weights[i] << " ";
+
+	for (int i = 0; i < this->size - 1; ++i) {
+		for (int j = 0; j < this->layer[i + 1]; ++j) {
+			file_weight << bios[i][j] << " ";
+		}
+	}
+
+	std::cout << "[net] Weights saved" << std::endl;
+	file_weight.close();
 }

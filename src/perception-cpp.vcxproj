@@ -155,6 +155,8 @@
   <ItemGroup>
     <Text Include="dataset\mnist.txt" />
     <Text Include="dataset\mnist_10k.txt" />
+    <Text Include="test.txt" />
+    <Text Include="weights\Weights.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -20,8 +20,10 @@ public:
 	ActivationFunction(FUNCTION_ACTIVATE activate);
 	void getName();
 	Matrix derivative(Matrix value);
+	double derivative(double value);
+	void derivative(double* vector, int vector_size);
 	double use(double value);
-	Matrix use(Matrix matrix);
+	double* use(double* vector, int vector_size);
 	FUNCTION_ACTIVATE getType();
 };
 
